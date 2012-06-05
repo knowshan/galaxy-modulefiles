@@ -1,0 +1,25 @@
+#%Module
+
+set pythonver 2.6.6
+set pythonroot /share/apps/galaxy/python/$pythonver
+set url "http://www.python.org/"
+set msg "This module adds Python v$pythonver in galaxy install to various paths\n\nPython Official Site: $url\n"
+# http://wiki.tcl.tk/1624 - set global env variable
+set home $::env(HOME)
+
+proc ModulesHelp { } {
+   puts stderr "$msg"
+}
+
+module-whatis   "$msg"
+
+setenv PYTHONHOME $pythonroot
+prepend-path PATH $pythonroot/bin
+#append-path PYTHONPATH $pythonroot/lib/python$pythonver/site-packages
+#append-path PYTHONPATH $pythonroot/lib
+
+# PYTHON_EGG_CACHE - set in user's home dir
+setenv PYTHON_EGG_CACHE $home/.python-eggs
+
+set-alias "python" "$pythonroot/bin/python2.6"
+

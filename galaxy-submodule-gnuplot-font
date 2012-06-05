@@ -1,0 +1,20 @@
+#%Module
+
+# Set gnu plot related env
+
+set gdfontpath /usr/share/fonts/bitstream-vera
+set defaultgdfont Vera
+set test_font /usr/java/latest
+
+set url "http://projects.uabgrid.uab.edu/galaxy/ticket/13"
+set msg "This module sets default font for gnuplot. Check $url for more information.\n"
+
+proc ModulesHelp { } {
+   puts stderr "$msg"
+}
+
+module-whatis   "$msg"
+
+setenv GDFONTPATH $gdfontpath
+setenv GNUPLOT_DEFAULT_GDFONT $defaultgdfont
+setenv TESTFONT $test_font

@@ -1,0 +1,21 @@
+#%Module
+# MACS - Galaxy tool 
+set pythonver 2.6
+set toolname MACS
+set toolversion 1.3.7.1
+set installroot /share/apps/galaxy/python-packages/$toolname-$toolversion
+set pythonpath $installroot/lib/python$pythonver/site-packages
+set url "http://liulab.dfci.harvard.edu/MACS"
+set msg "This module adds $toolname v$toolversion to galaxy path.\nTool URL: $url\n"
+# http://wiki.tcl.tk/1624 - set global env variable
+set home $::env(HOME)
+
+proc ModulesHelp { } {
+   puts stderr "$msg"
+}
+
+module-whatis   "$msg"
+
+prepend-path PATH $installroot/bin
+prepend-path PYTHONPATH $pythonpath
+

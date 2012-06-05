@@ -1,0 +1,18 @@
+#%Module
+
+# Set JAVA_HOME and modify path with jdk/java related files
+
+set javahome "/usr/java/latest"
+
+set url "http://projects.uabgrid.uab.edu/galaxy/ticket/24"
+set msg "This module sets environment variable JAVA_HOME and modifies PATH to include java command. Check $url for more information.\n"
+
+proc ModulesHelp { } {
+   puts stderr "$msg"
+}
+
+module-whatis   "$msg"
+
+setenv JAVA_HOME $javahome
+prepend-path PATH $javahome/bin
+

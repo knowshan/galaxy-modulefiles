@@ -1,0 +1,27 @@
+#%Module
+
+# Set DRMAA env
+
+set sge_root /opt/gridengine
+set sge_qmaster_port 536
+set sge_cell default
+set sge_execd_port 537
+set sge_arch lx26-amd64
+set drmaa_lib /opt/gridengine/lib/lx26-amd64/libdrmaa.so.1.0
+
+set url "http://projects.uabgrid.uab.edu/galaxy/ticket/14"
+set msg "This module sets environment variables for SGE/DRMAA configuration. Check $url for more information.\n"
+
+proc ModulesHelp { } {
+   puts stderr "$msg"
+}
+
+module-whatis   "$msg"
+
+setenv SGE_ROOT $sge_root
+setenv SGE_QMASTER_PORT $sge_qmaster_port
+setenv SGE_CELL $sge_cell
+setenv SGE_EXECD_PORT $sge_execd_port
+setenv SGE_ARCH $sge_arch
+setenv DRMAA_LIBRARY_PATH $drmaa_lib 
+
