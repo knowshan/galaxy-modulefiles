@@ -1,0 +1,66 @@
+#%Module
+
+# Module for running personal galaxy instance in $home/projects/galaxy/galaxy
+set galaxyver 1.0
+set galaxyroot /share/apps/galaxy
+set home $::env(HOME)
+# personal galaxy 
+set galaxyinstallroot $home/projects/galaxy/galaxy
+set url "https://galaxy.uabgrid.uab.edu/"
+set msg "This module modifies shell envieonment to run personal galaxy instance in $galaxyinstallroot.\n\nPython Official Site: $url\n"
+
+# Note, TEMP is NOT set in this module and you can/should set it in your shell
+# environment as needed
+# The galaxy web interface uses TEMP=/lustre/project/galaxy/temp
+
+
+# List modules that conflict with this module - 'module load' will fail if 
+# conflicting modules are already loaded
+conflict python/python-2.7 python/python-2.6
+
+# Functions!
+proc ModulesHelp { } {
+   puts stderr "$msg"
+}
+
+# returns list of submodule files in given module directory
+proc getSubmoduleFiles { module_directory } {
+  list module_files []
+  set _module_name [file tail $module_directory]
+  set _module_files_full_path [glob -directory $module_directory -type f -- "$_module_name-submodule-*"]
+  # following forreach is useless, as there is no string/path modification inside it
+  foreach _module_file $_module_files_full_path {
+    # lappend module_files [file tail $path]
+    lappend module_files $_module_file
+  }
+  return $module_files
+}
+
+# The code-logic can be implemented in less number of lines, however, I prefer
+# verbose code compared to esoteric language constructs.
+
+# loads module files passed as a list
+proc loadModuleFiles { module_files } {
+  foreach _module_file $module_files {
+    module load $_module_file
+  }
+}
+
+module-whatis   "$msg"
+
+setenv GALAXY_TOOLS $galaxyroot/galaxy-tools
+setenv GALAXY_PYTHON $galaxyroot/python
+setenv GALAXY_LIB $galaxyinstallroot/lib
+
+# Note - bin and lib paths are apended, hence paths defined using other methods
+# may take precedence. This is done intentionally so that you can add bin/lib for
+# testing which can take precedence over system galaxy tools/bins/libs.
+append-path PATH "$galaxyroot/galaxy-tools/bin"
+append-path LD_LIBRARY_PATH $galaxyroot/galaxy-tools/lib:$galaxyroot/galaxy-tools/lib64:$galaxyroot/galaxy-tools/lib64/R
+append-path PYTHONPATH "$galaxyinstallroot/lib"
+
+# Get galaxy submodules - python, tool-specifics etc
+set mfiles [getSubmoduleFiles "/etc/modulefiles/galaxy/"]
+# load list of modules
+loadModuleFiles $mfiles
+
